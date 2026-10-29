@@ -41,3 +41,7 @@ A full run is big. It starts many helper agents, takes about an hour and uses a 
 - `SKILL.md`: the full method, step by step
 - `scripts/engine.py`: the clerical helper (gathering cards, merging repeats, the local search box, joining critic verdicts, drawing the pages). It enforces the method's rules, such as no ideas for gaps that failed their check, decoys that catch fooled critics, and a minimum number of searches per verdict.
 - `scripts/picks.html` and `scripts/page.html`: templates for the picks page and the map
+
+## License
+
+MIT. See `LICENSE`.
