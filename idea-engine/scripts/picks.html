@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Idea picks</title>
+<style>
+:root{--bg:#fafaf9;--panel:#fff;--wash:#f1f0ec;--ink:#1c1c1a;--muted:#75736d;--line:#e3e1db;--line2:#c9c6be;--accent:#c2410c;--pick:#15803d}
+@media (prefers-color-scheme:dark){:root{--bg:#121211;--panel:#1b1b1a;--wash:#232321;--ink:#ecebe7;--muted:#9a978f;--line:#2e2d2a;--line2:#4a4843;--accent:#fb923c;--pick:#4ade80}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,BlinkMacSystemFont,Inter,system-ui,sans-serif}
+header,main,footer{max-width:1180px;margin:0 auto;padding:0 24px}
+header{padding-top:32px}
+h1{font-size:24px;line-height:1.3;font-weight:600;margin:0 0 6px}
+header p{margin:0;color:var(--muted)}
+#map{display:inline-block;margin-top:10px;font-size:14px;color:var(--ink)}
+.sample{background:var(--wash);margin:0;padding:22px 24px;font-size:15px;line-height:1.55;border-left:3px solid var(--line2)}
+h2{font-size:15px;font-weight:600;margin:36px 0 14px}
+h2 span{color:var(--muted);font-weight:400}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:18px}
+.idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.idea.picked{border-color:var(--pick);box-shadow:0 0 0 1px var(--pick)}
+.mock{background:var(--wash);display:grid;place-items:center;padding:22px;min-height:236px}
+.body{padding:16px;display:flex;flex-direction:column;gap:8px;flex:1}
+h3{font-size:16px;line-height:1.35;margin:0}
+.frame{font-size:13px;color:var(--muted);margin:0}
+.steal{margin:2px 0 0;font-size:14px}
+.steal b,.try b{font-weight:600}
+.try{margin:0;font-size:14px;background:var(--wash);border-radius:10px;padding:8px 12px}
+.ways{margin:0;padding-left:18px;color:var(--muted);font-size:13.5px;display:grid;gap:3px}
+.act{display:flex;gap:8px;align-items:flex-start;margin-top:auto;padding-top:8px}
+.pickb{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line2);background:none;color:var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer;white-space:nowrap}
+.picked .pickb{background:var(--pick);border-color:var(--pick);color:var(--bg)}
+textarea{flex:1;font:inherit;font-size:13px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:6px 10px;resize:vertical;min-height:34px}
+footer{padding:32px 24px 56px;display:flex;gap:12px;align-items:center}
+#copy{font:inherit;font-weight:600;background:var(--ink);color:var(--bg);border:0;border-radius:999px;padding:10px 18px;cursor:pointer}
+#copied{color:var(--muted);font-size:13px}
+/* the small picture of each idea */
+.scr{width:236px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px;font-size:12px;line-height:1.35;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+.scr .t{font-weight:600;color:var(--muted)}
+.scr .big{font-size:18px;font-weight:600;color:var(--ink)}
+.scr .big.sm{font-size:14px}
+.scr .sub{color:var(--muted);font-size:11px}
+.scr .btn{align-self:flex-start;background:var(--ink);color:var(--bg);border-radius:999px;padding:5px 11px;font-size:11px;font-weight:600}
+.scr .btn.s{padding:2px 8px;font-size:10px;align-self:center}
+.scr .row{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--line);padding-top:6px}
+.scr .search{border:1px solid var(--line);border-radius:8px;padding:5px 8px;color:var(--muted)}
+.scr .search::before{content:"⌕  "}
+.scr .bar{height:6px;background:var(--line);border-radius:9px;overflow:hidden}
+.scr .bar i{display:block;height:100%;background:var(--ink)}
+.scr .card{border:1px solid var(--line);border-radius:10px;padding:8px 10px;display:flex;justify-content:space-between;align-items:center;font-weight:600}
+.scr .chips{display:flex;gap:6px;flex-wrap:wrap}
+.scr .chip{border:1px solid var(--line);border-radius:999px;padding:2px 8px;font-size:11px;font-weight:500}
+.scr .who{display:flex;gap:8px;align-items:center;font-weight:600}
+.scr .av{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:11px}
+.scr .note{background:var(--wash);border-radius:10px;padding:8px}
+.scr .dash{border:1.5px dashed var(--line2);border-radius:10px;padding:18px 10px;text-align:center}
+.scr .field{border:1px solid var(--line);border-radius:8px;padding:6px 8px;color:var(--muted);font-style:italic}
+/* rough motion for sketches; off when the viewer prefers reduced motion */
+.scr .mv-slide{animation:mvslide 2.4s cubic-bezier(.34,1.56,.64,1) infinite alternate}
+.scr .mv-flat{animation:mvslide 2.4s linear infinite alternate;opacity:.45}
+.scr .mv-pop{animation:mvpop 1.8s cubic-bezier(.34,1.56,.64,1) infinite}
+.scr .mv-blink{animation:mvblink 1.6s steps(2) infinite}
+@keyframes mvslide{from{transform:translateX(0)}to{transform:translateX(92px)}}
+@keyframes mvpop{0%,100%{transform:scale(.92)}50%{transform:scale(1.04)}}
+@keyframes mvblink{50%{opacity:.25}}
+.scr .box{width:44px;height:28px;border-radius:7px;background:var(--accent)}
+.scr .code{font:11px/1.45 ui-monospace,Menlo,monospace;background:var(--wash);border-radius:8px;padding:7px 8px;color:var(--ink)}
+.scr .code u{text-decoration-color:var(--accent);text-decoration-thickness:2px}
+.scr .code s{color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.scr [class*="mv-"]{animation:none}}
+@media (max-width:520px){header,main{padding:0 16px}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1 id="q"></h1>
+  <p>Pick the ones worth taking further, and add a few words on why.</p>
+  <a id="map" href="map.html" hidden>See the map</a>
+</header>
+<main id="main"></main>
+<footer><button id="copy">Copy my picks</button><span id="copied"></span></footer>
+<script>
+const D = __DATA__;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const KEY = "idea-picks:" + D.q.question;
+let state = {};
+try { state = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) {}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+
+$("#q").textContent = D.q.question;
+if (D.has_map) $("#map").hidden = false;
+const GROUPS = [["use", "Just use this"], ["close", "Close"], ["fresh", "Fresh"], ["outlier", "Outlier"], ["copy", "Copies"], ["not judged", "Not judged yet"]];
+$("#main").innerHTML = GROUPS.map(([v, label]) => {
+  const list = D.ideas.filter(d => d.verdict === v);
+  if (!list.length) return "";
+  return '<h2>' + label + ' <span>' + list.length + '</span></h2><div class="grid">' + list.map(d => {
+    const s = state[d.name] || {};
+    return '<article class="idea' + (s.picked ? " picked" : "") + '" data-name="' + esc(d.name) + '">' +
+      (d.mock ? '<div class="mock"><div class="scr">' + d.mock + '</div></div>' : d.sample ? '<blockquote class="sample">' + esc(d.sample) + '</blockquote>' : "") +
+      '<div class="body"><h3>' + esc(d.name) + '</h3><p class="frame">' + esc(d.frame) + '</p>' +
+      '<p class="steal"><b>Steal:</b> ' + esc(d.steal) + '</p>' +
+      '<ul class="ways">' + (d.ways || []).map(w => "<li>" + esc(w) + "</li>").join("") + '</ul>' +
+      (d.try ? '<p class="try"><b>Try tomorrow:</b> ' + esc(d.try) + '</p>' : "") +
+      '<div class="act"><button class="pickb">' + (s.picked ? "Picked" : "Pick") + '</button>' +
+      '<textarea rows="1" placeholder="Why?" aria-label="Your note on ' + esc(d.name) + '">' + esc(s.note) + '</textarea></div></div></article>';
+  }).join("") + "</div>";
+}).join("");
+
+document.querySelectorAll(".idea").forEach(el => {
+  const name = el.dataset.name;
+  el.querySelector(".pickb").onclick = () => {
+    const s = state[name] = state[name] || {};
+    s.picked = !s.picked;
+    el.classList.toggle("picked", s.picked);
+    el.querySelector(".pickb").textContent = s.picked ? "Picked" : "Pick";
+    save();
+  };
+  el.querySelector("textarea").oninput = e => { (state[name] = state[name] || {}).note = e.target.value; save(); };
+});
+
+$("#copy").onclick = async () => {
+  const line = d => "- " + d.name + ((state[d.name] || {}).note ? ": " + state[d.name].note : "");
+  const picked = D.ideas.filter(d => (state[d.name] || {}).picked);
+  const rest = D.ideas.filter(d => !(state[d.name] || {}).picked && (state[d.name] || {}).note);
+  const text = "My picks for: " + D.q.question + "\n\nPicked:\n" + (picked.map(line).join("\n") || "- none") +
+    (rest.length ? "\n\nNot picked, with notes:\n" + rest.map(line).join("\n") : "");
+  try { await navigator.clipboard.writeText(text); $("#copied").textContent = "Copied. Paste it into the chat."; }
+  catch (e) { $("#copied").textContent = "Couldn't copy. Select and copy this:"; prompt("Your picks", text); }
+};
+</script>
+</body>
+</html>
